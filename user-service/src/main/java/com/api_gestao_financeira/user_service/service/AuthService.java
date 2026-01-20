@@ -1,0 +1,30 @@
+package com.api_gestao_financeira.user_service.service;
+
+import com.api_gestao_financeira.user_service.domain.UsuarioDetailsImpl;
+import com.api_gestao_financeira.user_service.domain.Usuario;
+import com.api_gestao_financeira.user_service.dto.LoginDto;
+import com.api_gestao_financeira.user_service.repository.UsuarioRepository;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.stereotype.Service;
+
+@Service
+public class AuthService implements UserDetailsService {
+
+    @Autowired
+    private UsuarioRepository usuarioRepository;
+
+    @Override
+    public UserDetails loadUserByUsername(String login) {
+        Usuario usuario = usuarioRepository.findByNome(login)
+                .orElseThrow(() -> new UsernameNotFoundException("User not found"));
+        return new UsuarioDetailsImpl(usuario);
+    }
+
+    public void registrar(LoginDto loginDto) {
+        Usuario usuario = new Usuario(loginDto.nome(), loginDto.senha());
+        usuarioRepository.save(usuario);
+    }
+}
