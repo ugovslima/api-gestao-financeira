@@ -23,8 +23,4 @@ public class AuthService implements UserDetailsService {
         return new UsuarioDetailsImpl(usuario);
     }
 
-    public void registrar(LoginDto loginDto) {
-        Usuario usuario = new Usuario(loginDto.nome(), loginDto.senha());
-        usuarioRepository.save(usuario);
-    }
 }
