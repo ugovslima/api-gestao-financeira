@@ -1,4 +1,4 @@
-package com.api_gestao_financeira.user_service.config.security;
+package com.api_gestao_financeira.user_service.security;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;

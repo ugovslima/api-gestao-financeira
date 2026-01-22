@@ -1,4 +1,4 @@
-package com.api_gestao_financeira.user_service.config.security;
+package com.api_gestao_financeira.user_service.security;
 
 import com.api_gestao_financeira.user_service.domain.UsuarioDetailsImpl;
 import com.auth0.jwt.JWT;

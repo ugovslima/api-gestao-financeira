@@ -1,6 +1,6 @@
 package com.api_gestao_financeira.user_service.controller;
 
-import com.api_gestao_financeira.user_service.config.security.JwtTokenProvider;
+import com.api_gestao_financeira.user_service.security.JwtTokenProvider;
 import com.api_gestao_financeira.user_service.domain.UsuarioDetailsImpl;
 import com.api_gestao_financeira.user_service.dto.LoginDto;
 import com.api_gestao_financeira.user_service.dto.TokenJwtDto;

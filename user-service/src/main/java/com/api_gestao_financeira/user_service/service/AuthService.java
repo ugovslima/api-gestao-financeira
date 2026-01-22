@@ -2,7 +2,6 @@ package com.api_gestao_financeira.user_service.service;
 
 import com.api_gestao_financeira.user_service.domain.UsuarioDetailsImpl;
 import com.api_gestao_financeira.user_service.domain.Usuario;
-import com.api_gestao_financeira.user_service.dto.LoginDto;
 import com.api_gestao_financeira.user_service.repository.UsuarioRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
