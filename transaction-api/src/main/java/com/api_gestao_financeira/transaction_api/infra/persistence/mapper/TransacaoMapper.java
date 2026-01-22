@@ -2,6 +2,7 @@ package com.api_gestao_financeira.transaction_api.infra.persistence.mapper;
 
 import com.api_gestao_financeira.transaction_api.core.domain.Transacao;
 import com.api_gestao_financeira.transaction_api.core.valueObjects.Parcelas;
+import com.api_gestao_financeira.transaction_api.infra.dto.TransacaoEvento;
 import com.api_gestao_financeira.transaction_api.infra.dto.TransacaoResponse;
 import com.api_gestao_financeira.transaction_api.infra.persistence.entity.TransacaoEntity;
 
@@ -45,6 +46,17 @@ public class TransacaoMapper {
                 transacao.getDescricao(),
                 transacao.getParcelas().getQuantidade(),
                 transacao.getBanco().name()
+        );
+    }
+
+    public static TransacaoEvento toEvent(Transacao transacao) {
+        return new TransacaoEvento(
+                transacao.getId(),
+                transacao.getUsuarioId(),
+                transacao.getFormaPagamento(),
+                transacao.getValor(),
+                transacao.getStatus(),
+                transacao.getBanco()
         );
     }
 }

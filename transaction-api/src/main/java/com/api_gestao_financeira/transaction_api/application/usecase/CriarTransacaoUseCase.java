@@ -1,5 +1,6 @@
 package com.api_gestao_financeira.transaction_api.application.usecase;
 
+import com.api_gestao_financeira.transaction_api.application.gateway.PublicarTransacaoGateway;
 import com.api_gestao_financeira.transaction_api.application.gateway.TransacaoGateway;
 import com.api_gestao_financeira.transaction_api.core.domain.Transacao;
 import com.api_gestao_financeira.transaction_api.core.valueObjects.Banco;
@@ -12,9 +13,11 @@ import java.time.LocalDate;
 public class CriarTransacaoUseCase {
 
     private final TransacaoGateway transacaoGateway;
+    private final PublicarTransacaoGateway publicarTransacaoGateway;
 
-    public CriarTransacaoUseCase(TransacaoGateway transacaoGateway) {
+    public CriarTransacaoUseCase(TransacaoGateway transacaoGateway, PublicarTransacaoGateway publicarTransacaoGateway) {
         this.transacaoGateway = transacaoGateway;
+        this.publicarTransacaoGateway = publicarTransacaoGateway;
     }
 
     public Transacao executar(
@@ -37,6 +40,9 @@ public class CriarTransacaoUseCase {
                 banco
         );
 
-        return transacaoGateway.salvar(transacao);
+        Transacao salva = transacaoGateway.salvar(transacao);
+        publicarTransacaoGateway.publicarTransacao(salva);
+
+        return salva;
     }
 }

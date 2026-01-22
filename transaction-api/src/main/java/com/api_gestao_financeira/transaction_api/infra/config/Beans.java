@@ -1,5 +1,6 @@
 package com.api_gestao_financeira.transaction_api.infra.config;
 
+import com.api_gestao_financeira.transaction_api.application.gateway.PublicarTransacaoGateway;
 import com.api_gestao_financeira.transaction_api.application.gateway.TransacaoGateway;
 import com.api_gestao_financeira.transaction_api.application.usecase.BuscarTransacaoPorIdUseCase;
 import com.api_gestao_financeira.transaction_api.application.usecase.CriarTransacaoUseCase;
@@ -11,9 +12,10 @@ public class Beans {
 
     @Bean
     public CriarTransacaoUseCase criarTransacaoUseCase(
-            TransacaoGateway gateway
+            TransacaoGateway transacaoGateway,
+            PublicarTransacaoGateway publicarTransacaoGateway
     ) {
-        return new CriarTransacaoUseCase(gateway);
+        return new CriarTransacaoUseCase(transacaoGateway, publicarTransacaoGateway);
     }
 
     @Bean
