@@ -1,25 +1,30 @@
 package com.api_gestao_financeira.processor_worker.core.domain;
 
+import com.api.gestaofinanceira.common.enums.Banco;
+import com.api.gestaofinanceira.common.enums.FormaPagamento;
+import com.api.gestaofinanceira.common.enums.StatusTransacao;
+
 import java.math.BigDecimal;
 
 public class Transacao {
 
     private Long id;
-    private String banco;
-    private String formaPagamento;
+    private Long usuarioId;
+    private FormaPagamento formaPagamento;
     private BigDecimal valor;
-    private String status;
+    private StatusTransacao status;
+    private Banco banco;
     private String motivo;
 
     public Long getId() {
         return id;
     }
 
-    public String getBanco() {
-        return banco;
+    public Long getUsuarioId() {
+        return usuarioId;
     }
 
-    public String getFormaPagamento() {
+    public FormaPagamento getFormaPagamento() {
         return formaPagamento;
     }
 
@@ -27,8 +32,12 @@ public class Transacao {
         return valor;
     }
 
-    public String getStatus() {
+    public StatusTransacao getStatus() {
         return status;
+    }
+
+    public Banco getBanco() {
+        return banco;
     }
 
     public String getMotivo() {
@@ -36,11 +45,11 @@ public class Transacao {
     }
 
     public void aprovarStatus() {
-        this.status = "APROVADA";
+        this.status = StatusTransacao.APROVADA;
     }
 
     public void recusarStatus() {
-        this.status = "RECUSADA";
+        this.status = StatusTransacao.RECUSADA;
     }
 
     public void setMotivo(String motivo) {

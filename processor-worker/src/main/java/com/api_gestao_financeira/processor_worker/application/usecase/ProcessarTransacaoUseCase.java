@@ -1,5 +1,7 @@
 package com.api_gestao_financeira.processor_worker.application.usecase;
 
+import com.api.gestaofinanceira.common.enums.FormaPagamento;
+import com.api.gestaofinanceira.common.enums.StatusTransacao;
 import com.api_gestao_financeira.processor_worker.application.dto.SaldoLimite;
 import com.api_gestao_financeira.processor_worker.application.gateway.SaldoLimiteGateway;
 import com.api_gestao_financeira.processor_worker.application.gateway.TransacaoRepository;
@@ -17,80 +19,76 @@ public class ProcessarTransacaoUseCase {
         this.transacaoRepository = transacaoRepository;
     }
 
-    public void processar(Transacao transacao){
+    public void executar(Transacao transacao) {
 
-        if(!transacao.getStatus().equals("PENDENTE")){
+        if (transacao.getStatus() != StatusTransacao.PENDENTE) {
             return;
         }
 
-        if ("DINHEIRO".equals(transacao.getFormaPagamento())) {
-
+        if (transacao.getFormaPagamento() == FormaPagamento.DINHEIRO) {
             transacao.aprovarStatus();
             transacao.setMotivo("Transação em dinheiro - aprovada automaticamente");
             transacaoRepository.atualizar(transacao);
             return;
         }
 
-        SaldoLimite saldoLimite = saldoLimiteGateway.consultarPorBanco(transacao.getBanco());
+        SaldoLimite saldoLimite =
+                saldoLimiteGateway.consultarPorBanco(transacao.getBanco().name());
 
-        if ("CREDITO".equals(transacao.getFormaPagamento())
-                && saldoLimite.limite().compareTo(transacao.getValor()) >= 0) {
+        if (transacao.getFormaPagamento() == FormaPagamento.CREDITO) {
 
-            BigDecimal saldoRestante =
-                    saldoLimite.saldo().subtract(transacao.getValor());
+            if (saldoLimite.limite().compareTo(transacao.getValor()) >= 0) {
+                BigDecimal saldoRestante =
+                        saldoLimite.limite().subtract(transacao.getValor());
 
-            transacao.aprovarStatus();
-            transacao.setMotivo("Compra aprovada. Limite disponível após compra: " + saldoRestante);
-            transacaoRepository.atualizar(transacao);
-            return;
+                transacao.aprovarStatus();
+                transacao.setMotivo(
+                        "Limite disponível após compra: " + saldoRestante
+                );
+            } else {
+                transacao.recusarStatus();
+                transacao.setMotivo("Limite insuficiente. Limite atual: " + saldoLimite.limite());
+            }
 
-        } else if ("CREDITO".equals(transacao.getFormaPagamento())
-                && saldoLimite.limite().compareTo(transacao.getValor()) < 0) {
-
-            transacao.recusarStatus();
-            transacao.setMotivo("Compra recusada. Limite insuficiente");
-            transacaoRepository.atualizar(transacao);
-            return;
-        }
-
-        if ("DEBITO".equals(transacao.getFormaPagamento())
-                && saldoLimite.saldo().compareTo(transacao.getValor()) >= 0) {
-
-            BigDecimal saldoRestante =
-                    saldoLimite.saldo().subtract(transacao.getValor());
-
-            transacao.aprovarStatus();
-            transacao.setMotivo("Compra aprovada. Saldo após compra: " + saldoRestante);
-            transacaoRepository.atualizar(transacao);
-            return;
-
-        } else if ("DEBITO".equals(transacao.getFormaPagamento())
-                && saldoLimite.saldo().compareTo(transacao.getValor()) < 0) {
-
-            transacao.recusarStatus();
-            transacao.setMotivo("Compra recusada. Saldo insuficiente");
             transacaoRepository.atualizar(transacao);
             return;
         }
 
-        if ("PIX".equals(transacao.getFormaPagamento())
-                && saldoLimite.saldo().compareTo(transacao.getValor()) >= 0) {
+        if (transacao.getFormaPagamento() == FormaPagamento.DEBITO) {
 
-            BigDecimal saldoRestante =
-                    saldoLimite.saldo().subtract(transacao.getValor());
+            if (saldoLimite.saldo().compareTo(transacao.getValor()) >= 0) {
+                BigDecimal saldoRestante =
+                        saldoLimite.saldo().subtract(transacao.getValor());
 
-            transacao.aprovarStatus();
-            transacao.setMotivo("Compra aprovada via PIX. Saldo após compra: " + saldoRestante);
+                transacao.aprovarStatus();
+                transacao.setMotivo(
+                        "Saldo após compra: " + saldoRestante
+                );
+            } else {
+                transacao.recusarStatus();
+                transacao.setMotivo("Saldo insuficiente. Saldo atual: " + saldoLimite.saldo());
+            }
+
             transacaoRepository.atualizar(transacao);
             return;
+        }
 
-        } else if ("PIX".equals(transacao.getFormaPagamento())
-                && saldoLimite.saldo().compareTo(transacao.getValor()) < 0) {
+        if (transacao.getFormaPagamento() == FormaPagamento.PIX) {
 
-            transacao.recusarStatus();
-            transacao.setMotivo("Compra recusada. Saldo insuficiente para PIX");
+            if (saldoLimite.saldo().compareTo(transacao.getValor()) >= 0) {
+                BigDecimal saldoRestante =
+                        saldoLimite.saldo().subtract(transacao.getValor());
+
+                transacao.aprovarStatus();
+                transacao.setMotivo(
+                        "Saldo após compra: " + saldoRestante
+                );
+            } else {
+                transacao.recusarStatus();
+                transacao.setMotivo("Saldo insuficiente. Saldo atual: " + saldoLimite.saldo());
+            }
+
             transacaoRepository.atualizar(transacao);
-            return;
         }
     }
 }

@@ -1,4 +1,4 @@
-package com.api_gestao_financeira.transaction_api.core.enums;
+package com.api.gestaofinanceira.common.enums;
 
 public enum StatusTransacao {
     PENDENTE,
