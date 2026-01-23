@@ -1,9 +1,9 @@
 package com.api_gestao_financeira.transaction_api.core.domain;
 
-import com.api_gestao_financeira.transaction_api.core.valueObjects.Banco;
-import com.api_gestao_financeira.transaction_api.core.valueObjects.FormaPagamento;
+import com.api_gestao_financeira.transaction_api.core.enums.Banco;
+import com.api_gestao_financeira.transaction_api.core.enums.FormaPagamento;
 import com.api_gestao_financeira.transaction_api.core.valueObjects.Parcelas;
-import com.api_gestao_financeira.transaction_api.core.valueObjects.StatusTransacao;
+import com.api_gestao_financeira.transaction_api.core.enums.StatusTransacao;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
