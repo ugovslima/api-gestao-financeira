@@ -5,6 +5,7 @@ import com.api.gestaofinanceira.common.enums.FormaPagamento;
 import com.api.gestaofinanceira.common.enums.StatusTransacao;
 
 import java.math.BigDecimal;
+import java.time.LocalDate;
 
 public class Transacao {
 
@@ -15,6 +16,15 @@ public class Transacao {
     private StatusTransacao status;
     private Banco banco;
     private String motivo;
+
+    public Transacao(Long id, Long usuarioId, FormaPagamento formaPagamento, BigDecimal valor, StatusTransacao status, Banco banco) {
+        this.id = id;
+        this.usuarioId = usuarioId;
+        this.formaPagamento = formaPagamento;
+        this.valor = valor;
+        this.status = status;
+        this.banco = banco;
+    }
 
     public Long getId() {
         return id;
@@ -55,4 +65,8 @@ public class Transacao {
     public void setMotivo(String motivo) {
         this.motivo = motivo;
     }
+
+
+
+
 }

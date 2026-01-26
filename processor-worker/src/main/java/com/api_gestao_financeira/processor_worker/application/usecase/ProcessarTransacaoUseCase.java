@@ -21,6 +21,10 @@ public class ProcessarTransacaoUseCase {
 
     public void executar(Transacao transacao) {
 
+        System.out.println("-------------------------------------------------------");
+        System.out.println("a mensagem chegou ao usecase");
+        System.out.println("-------------------------------------------------------");
+
         if (transacao.getStatus() != StatusTransacao.PENDENTE) {
             return;
         }
