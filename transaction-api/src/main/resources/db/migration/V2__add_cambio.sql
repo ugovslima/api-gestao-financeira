@@ -1,0 +1,3 @@
+ALTER TABLE transacoes
+ADD COLUMN moeda_origem VARCHAR(10) NOT NULL,
+ADD COLUMN taxa_cambio NUMERIC(15, 8) NOT NULL DEFAULT 1;

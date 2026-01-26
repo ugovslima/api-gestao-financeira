@@ -3,6 +3,7 @@ package com.api_gestao_financeira.transaction_api.core.domain;
 import com.api.gestaofinanceira.common.enums.Banco;
 import com.api.gestaofinanceira.common.enums.FormaPagamento;
 import com.api.gestaofinanceira.common.enums.StatusTransacao;
+import com.api_gestao_financeira.transaction_api.core.valueObjects.Cambio;
 import com.api_gestao_financeira.transaction_api.core.valueObjects.Parcelas;
 
 import java.math.BigDecimal;
@@ -19,6 +20,9 @@ public class Transacao {
     private Parcelas parcelas;
     private Banco banco;
     private StatusTransacao status;
+    private Cambio cambio;
+
+    private String motivo;
 
     public Transacao(
             Long usuarioId,
@@ -27,7 +31,8 @@ public class Transacao {
             LocalDate data,
             String descricao,
             Parcelas parcelas,
-            Banco banco
+            Banco banco,
+            Cambio cambio
     ) {
         this.usuarioId = usuarioId;
         this.formaPagamento = formaPagamento;
@@ -37,6 +42,7 @@ public class Transacao {
         this.parcelas = parcelas;
         this.banco = banco;
         this.status = StatusTransacao.PENDENTE;
+        this.cambio = cambio;
     }
 
     public Long getId() {
@@ -75,7 +81,23 @@ public class Transacao {
         return status;
     }
 
+    public Cambio getCambio() {
+        return cambio;
+    }
+
     public void atribuirId(Long id) {
         this.id = id;
+    }
+
+    public void atribuirStatus(StatusTransacao status){
+        this.status = status;
+    }
+
+    public String getMotivo() {
+        return motivo;
+    }
+
+    public void atribuirMotivo(String motivo) {
+        this.motivo = motivo;
     }
 }

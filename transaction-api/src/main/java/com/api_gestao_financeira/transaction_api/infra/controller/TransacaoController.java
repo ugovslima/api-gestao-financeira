@@ -4,6 +4,7 @@ import com.api_gestao_financeira.transaction_api.application.usecase.BuscarTrans
 import com.api_gestao_financeira.transaction_api.application.usecase.CriarTransacaoUseCase;
 import com.api_gestao_financeira.transaction_api.core.domain.Transacao;
 import com.api_gestao_financeira.transaction_api.infra.dto.CriarTransacaoRequest;
+import com.api_gestao_financeira.transaction_api.infra.dto.TransacaoProcessadaResponse;
 import com.api_gestao_financeira.transaction_api.infra.dto.TransacaoResponse;
 import com.api_gestao_financeira.transaction_api.infra.persistence.mapper.TransacaoMapper;
 import org.springframework.http.ResponseEntity;
@@ -31,15 +32,16 @@ public class TransacaoController {
                 request.data(),
                 request.descricao(),
                 request.parcelas(),
-                request.banco()
+                request.banco(),
+                request.moeda()
         );
 
         return ResponseEntity.ok(TransacaoMapper.toResponse(transacao));
     }
 
     @GetMapping("/{transacaoId}")
-    public ResponseEntity<TransacaoResponse> buscar(@PathVariable Long transacaoId){
+    public ResponseEntity<TransacaoProcessadaResponse> buscar(@PathVariable Long transacaoId){
         Transacao transacao = buscarTransacaoPorIdUseCase.executar(transacaoId);
-        return ResponseEntity.ok(TransacaoMapper.toResponse(transacao));
+        return ResponseEntity.ok(TransacaoMapper.toProcessadaResponse(transacao));
     }
 }

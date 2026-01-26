@@ -3,6 +3,7 @@ package com.api_gestao_financeira.transaction_api.infra.persistence.entity;
 import com.api.gestaofinanceira.common.enums.Banco;
 import com.api.gestaofinanceira.common.enums.FormaPagamento;
 import com.api.gestaofinanceira.common.enums.StatusTransacao;
+import com.api_gestao_financeira.transaction_api.core.enums.Moeda;
 import jakarta.persistence.*;
 
 import java.math.BigDecimal;
@@ -34,6 +35,15 @@ public class TransacaoEntity {
 
     @Enumerated(EnumType.STRING)
     private StatusTransacao status;
+
+    @Enumerated(EnumType.STRING)
+    @Column(name = "moeda_origem", nullable = false)
+    private Moeda moedaOrigem;
+
+    @Column(name = "taxa_cambio", nullable = false)
+    private BigDecimal taxaCambio;
+
+    private String motivo;
 
     public TransacaoEntity() {
     }
@@ -108,6 +118,26 @@ public class TransacaoEntity {
 
     public void setStatus(StatusTransacao status) {
         this.status = status;
+    }
+
+    public Moeda getMoedaOrigem() {
+        return moedaOrigem;
+    }
+
+    public void setMoedaOrigem(Moeda moedaOrigem) {
+        this.moedaOrigem = moedaOrigem;
+    }
+
+    public BigDecimal getTaxaCambio() {
+        return taxaCambio;
+    }
+
+    public void setTaxaCambio(BigDecimal taxaCambio) {
+        this.taxaCambio = taxaCambio;
+    }
+
+    public String getMotivo() {
+        return motivo;
     }
 }
 
