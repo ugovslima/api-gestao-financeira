@@ -3,10 +3,7 @@ package com.api_gestao_financeira.transaction_api.infra.config;
 import com.api_gestao_financeira.transaction_api.application.gateway.CambioGateway;
 import com.api_gestao_financeira.transaction_api.application.gateway.PublicarTransacaoGateway;
 import com.api_gestao_financeira.transaction_api.application.gateway.TransacaoGateway;
-import com.api_gestao_financeira.transaction_api.application.usecase.BuscarTransacaoPorIdUseCase;
-import com.api_gestao_financeira.transaction_api.application.usecase.CriarRegistroUseCase;
-import com.api_gestao_financeira.transaction_api.application.usecase.CriarTransacaoPendenteUseCase;
-import com.api_gestao_financeira.transaction_api.application.usecase.GerarRelatorioDespesasUseCase;
+import com.api_gestao_financeira.transaction_api.application.usecase.*;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
@@ -42,5 +39,12 @@ public class Beans {
             TransacaoGateway transacaoGateway
     ) {
         return new GerarRelatorioDespesasUseCase(transacaoGateway);
+    }
+
+    @Bean
+    public GerarRelatorioDespesasPlanilhaUseCase gerarRelatorioDespesasPlanilhaUseCase(
+            TransacaoGateway transacaoGateway
+    ) {
+        return new GerarRelatorioDespesasPlanilhaUseCase(transacaoGateway);
     }
 }

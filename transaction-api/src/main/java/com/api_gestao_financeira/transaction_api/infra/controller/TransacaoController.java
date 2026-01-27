@@ -13,7 +13,6 @@ import com.api_gestao_financeira.transaction_api.infra.dto.CriarTransacaoRequest
 import com.api_gestao_financeira.transaction_api.infra.dto.TransacaoProcessadaResponse;
 import com.api_gestao_financeira.transaction_api.infra.dto.TransacaoResponse;
 import com.api_gestao_financeira.transaction_api.infra.persistence.mapper.TransacaoMapper;
-import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -74,24 +73,4 @@ public class TransacaoController {
         return ResponseEntity.ok(TransacaoMapper.toProcessadaResponse(transacao));
     }
 
-    @GetMapping("/resumo")
-    public ResponseEntity<RelatorioDespesas> gerarResumo(
-            @RequestParam Long usuarioId,
-            @RequestParam
-            @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
-            LocalDate dataReferencia,
-            @RequestParam TipoPeriodo tipoPeriodo,
-            @RequestParam(required = false) FormaPagamento formaPagamento
-    ) {
-
-        RelatorioDespesas resumo =
-                gerarRelatorioDespesasUseCase.executar(
-                        usuarioId,
-                        dataReferencia,
-                        tipoPeriodo,
-                        formaPagamento
-                );
-
-        return ResponseEntity.ok(resumo);
-    }
 }
