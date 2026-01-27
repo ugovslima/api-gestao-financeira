@@ -11,7 +11,7 @@ public record TransacaoProcessadaResponse(
         Long id,
         Long usuarioId,
         FormaPagamento formaPagamento,
-        BigDecimal valor,
+        BigDecimal valorBRL,
         StatusTransacao status,
         String motivo,
         LocalDate data,

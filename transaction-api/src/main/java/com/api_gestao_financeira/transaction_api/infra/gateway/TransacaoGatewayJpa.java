@@ -1,5 +1,6 @@
 package com.api_gestao_financeira.transaction_api.infra.gateway;
 
+import com.api.gestaofinanceira.common.enums.FormaPagamento;
 import com.api_gestao_financeira.transaction_api.application.gateway.TransacaoGateway;
 import com.api_gestao_financeira.transaction_api.core.domain.Transacao;
 import com.api_gestao_financeira.transaction_api.infra.persistence.entity.TransacaoEntity;
@@ -7,6 +8,8 @@ import com.api_gestao_financeira.transaction_api.infra.persistence.mapper.Transa
 import com.api_gestao_financeira.transaction_api.infra.persistence.repository.TransacaoRepository;
 import org.springframework.stereotype.Component;
 
+import java.time.LocalDate;
+import java.util.List;
 import java.util.Optional;
 
 @Component
@@ -29,5 +32,22 @@ public class TransacaoGatewayJpa implements TransacaoGateway {
     public Optional<Transacao> buscarPorId(Long id) {
         return repository.findById(id)
                 .map(TransacaoMapper::toDomain);
+    }
+
+    @Override
+    public List<Transacao> buscarPorPeriodo(
+            Long usuarioId,
+            LocalDate inicio,
+            LocalDate fim,
+            FormaPagamento formaPagamento) {
+
+        List<TransacaoEntity> entities = formaPagamento == null
+                        ? repository.findByUsuarioIdAndDataBetween(usuarioId, inicio, fim)
+                        : repository.findByUsuarioIdAndDataBetweenAndFormaPagamento(
+                        usuarioId, inicio, fim, formaPagamento);
+
+        return entities.stream()
+                .map(TransacaoMapper::toDomain)
+                .toList();
     }
 }
