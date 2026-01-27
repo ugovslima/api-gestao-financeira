@@ -46,11 +46,14 @@ public class GerarRelatorioDespesasUseCase {
 
         List<Transacao> transacoes =
                 transacaoGateway.buscarPorPeriodo(
-                        usuarioId,
-                        inicio,
-                        fim,
-                        formaPagamento
-                );
+                                usuarioId,
+                                inicio,
+                                fim,
+                                formaPagamento
+                        )
+                        .stream()
+                        .filter(Transacao::validaParaRelatorio)
+                        .toList();
 
         if (transacoes.isEmpty()) {
             return new RelatorioDespesas(

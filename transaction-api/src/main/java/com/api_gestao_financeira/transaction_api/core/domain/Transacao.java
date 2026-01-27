@@ -147,4 +147,9 @@ public class Transacao {
     public void atribuirMotivo(String motivo) {
         this.motivo = motivo;
     }
+
+    public boolean validaParaRelatorio() {
+        return status == StatusTransacao.APROVADA
+                || status == StatusTransacao.REGISTRADA;
+    }
 }
