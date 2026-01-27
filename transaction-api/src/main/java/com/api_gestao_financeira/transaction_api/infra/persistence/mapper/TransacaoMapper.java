@@ -38,6 +38,7 @@ public class TransacaoMapper {
                 entity.getDescricao(),
                 Parcelas.criar(entity.getFormaPagamento(), entity.getParcelas()),
                 entity.getBanco(),
+                entity.getStatus(),
                 cambio
         );
         transacao.atribuirId(entity.getId());

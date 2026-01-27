@@ -32,6 +32,7 @@ public class Transacao {
             String descricao,
             Parcelas parcelas,
             Banco banco,
+            StatusTransacao status,
             Cambio cambio
     ) {
         this.usuarioId = usuarioId;
@@ -41,8 +42,54 @@ public class Transacao {
         this.descricao = descricao;
         this.parcelas = parcelas;
         this.banco = banco;
-        this.status = StatusTransacao.PENDENTE;
+        this.status = status;
         this.cambio = cambio;
+    }
+
+    public static Transacao criarPendente(
+            Long usuarioId,
+            FormaPagamento formaPagamento,
+            BigDecimal valor,
+            LocalDate data,
+            String descricao,
+            Parcelas parcelas,
+            Banco banco,
+            Cambio cambio
+    ) {
+        return new Transacao(
+                usuarioId,
+                formaPagamento,
+                valor,
+                data,
+                descricao,
+                parcelas,
+                banco,
+                StatusTransacao.PENDENTE,
+                cambio
+        );
+    }
+
+    public static Transacao registrar(
+            Long usuarioId,
+            FormaPagamento formaPagamento,
+            BigDecimal valor,
+            LocalDate data,
+            String descricao,
+            Parcelas parcelas,
+            Banco banco,
+            Cambio cambio
+    ) {
+        return new Transacao(
+                usuarioId,
+                formaPagamento,
+                valor,
+                data,
+                descricao,
+                parcelas,
+                banco,
+                StatusTransacao.REGISTRADA,
+                cambio
+        );
     }
 
     public Long getId() {

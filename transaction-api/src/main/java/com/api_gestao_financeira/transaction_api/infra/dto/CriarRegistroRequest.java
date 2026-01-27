@@ -7,12 +7,14 @@ import com.api_gestao_financeira.transaction_api.core.enums.Moeda;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 
-public record CriarTransacaoRequest(
+public record CriarRegistroRequest(
         Long usuarioId,
         FormaPagamento formaPagamento,
         BigDecimal valor,
+        LocalDate data,
         String descricao,
         Integer parcelas,
         Banco banco,
         Moeda moeda
-) {}
+) {
+}

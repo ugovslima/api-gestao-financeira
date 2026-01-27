@@ -1,11 +1,10 @@
 package com.api_gestao_financeira.transaction_api.application.usecase;
 
-import com.api_gestao_financeira.transaction_api.application.gateway.CambioGateway;
-import com.api_gestao_financeira.transaction_api.application.gateway.PublicarTransacaoGateway;
-import com.api_gestao_financeira.transaction_api.application.gateway.TransacaoGateway;
-import com.api_gestao_financeira.transaction_api.core.domain.Transacao;
 import com.api.gestaofinanceira.common.enums.Banco;
 import com.api.gestaofinanceira.common.enums.FormaPagamento;
+import com.api_gestao_financeira.transaction_api.application.gateway.CambioGateway;
+import com.api_gestao_financeira.transaction_api.application.gateway.TransacaoGateway;
+import com.api_gestao_financeira.transaction_api.core.domain.Transacao;
 import com.api_gestao_financeira.transaction_api.core.enums.Moeda;
 import com.api_gestao_financeira.transaction_api.core.valueObjects.Cambio;
 import com.api_gestao_financeira.transaction_api.core.valueObjects.Parcelas;
@@ -13,15 +12,13 @@ import com.api_gestao_financeira.transaction_api.core.valueObjects.Parcelas;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 
-public class CriarTransacaoUseCase {
+public class CriarRegistroUseCase {
 
     private final TransacaoGateway transacaoGateway;
-    private final PublicarTransacaoGateway publicarTransacaoGateway;
     private final CambioGateway cambioGateway;
 
-    public CriarTransacaoUseCase(TransacaoGateway transacaoGateway, PublicarTransacaoGateway publicarTransacaoGateway, CambioGateway cambioGateway) {
+    public CriarRegistroUseCase(TransacaoGateway transacaoGateway, CambioGateway cambioGateway) {
         this.transacaoGateway = transacaoGateway;
-        this.publicarTransacaoGateway = publicarTransacaoGateway;
         this.cambioGateway = cambioGateway;
     }
 
@@ -33,8 +30,9 @@ public class CriarTransacaoUseCase {
             String descricao,
             Integer parcelas,
             Banco banco,
-            Moeda moeda
-    ) {
+            Moeda moeda) {
+
+        LocalDate dataCambio = data.minusDays(1);
 
         BigDecimal taxa = cambioGateway.buscarTaxa(
                 moeda == null ? Moeda.BRL : moeda,
@@ -44,7 +42,7 @@ public class CriarTransacaoUseCase {
         Cambio cambio = Cambio.criar(moeda, taxa);
         BigDecimal valorEmReais = valor.multiply(cambio.getTaxa());
 
-        Transacao transacao = new Transacao(
+        Transacao transacao = Transacao.registrar(
                 usuarioId,
                 formaPagamento,
                 valorEmReais,
@@ -56,7 +54,6 @@ public class CriarTransacaoUseCase {
         );
 
         Transacao salva = transacaoGateway.salvar(transacao);
-        publicarTransacaoGateway.publicarTransacao(salva);
 
         return salva;
     }

@@ -9,6 +9,7 @@ import org.springframework.web.client.RestTemplate;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 
 @Component
 public class CambioGatewayHttp implements CambioGateway {
@@ -18,6 +19,8 @@ public class CambioGatewayHttp implements CambioGateway {
     @Override
     public BigDecimal buscarTaxa(Moeda moeda, LocalDate data) {
 
+        String dataFormatada = data.format(DateTimeFormatter.ISO_LOCAL_DATE);
+
         if (moeda == Moeda.BRL) {
             return BigDecimal.ONE;
         }
@@ -25,7 +28,7 @@ public class CambioGatewayHttp implements CambioGateway {
         String url = String.format(
                 "https://brasilapi.com.br/api/cambio/v1/cotacao/%s/%s",
                 moeda.name(),
-                data
+                dataFormatada
         );
 
         CambioBrasilApiResponse response =

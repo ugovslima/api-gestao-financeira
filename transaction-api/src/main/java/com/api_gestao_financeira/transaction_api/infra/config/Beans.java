@@ -4,7 +4,8 @@ import com.api_gestao_financeira.transaction_api.application.gateway.CambioGatew
 import com.api_gestao_financeira.transaction_api.application.gateway.PublicarTransacaoGateway;
 import com.api_gestao_financeira.transaction_api.application.gateway.TransacaoGateway;
 import com.api_gestao_financeira.transaction_api.application.usecase.BuscarTransacaoPorIdUseCase;
-import com.api_gestao_financeira.transaction_api.application.usecase.CriarTransacaoUseCase;
+import com.api_gestao_financeira.transaction_api.application.usecase.CriarRegistroUseCase;
+import com.api_gestao_financeira.transaction_api.application.usecase.CriarTransacaoPendenteUseCase;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
@@ -12,12 +13,12 @@ import org.springframework.context.annotation.Configuration;
 public class Beans {
 
     @Bean
-    public CriarTransacaoUseCase criarTransacaoUseCase(
+    public CriarTransacaoPendenteUseCase criarTransacaoUseCase(
             TransacaoGateway transacaoGateway,
             PublicarTransacaoGateway publicarTransacaoGateway,
             CambioGateway cambioGateway
     ) {
-        return new CriarTransacaoUseCase(transacaoGateway, publicarTransacaoGateway, cambioGateway);
+        return new CriarTransacaoPendenteUseCase(transacaoGateway, publicarTransacaoGateway, cambioGateway);
     }
 
     @Bean
@@ -25,5 +26,13 @@ public class Beans {
             TransacaoGateway transacaoGateway
     ) {
         return new BuscarTransacaoPorIdUseCase(transacaoGateway);
+    }
+
+    @Bean
+    public CriarRegistroUseCase criarRegistroUseCase(
+            TransacaoGateway transacaoGateway,
+            CambioGateway cambioGateway
+    ) {
+        return new CriarRegistroUseCase(transacaoGateway, cambioGateway);
     }
 }
