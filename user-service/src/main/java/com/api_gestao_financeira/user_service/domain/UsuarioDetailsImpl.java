@@ -28,4 +28,8 @@ public class UsuarioDetailsImpl implements UserDetails {
     public String getUsername() {
         return usuario.getNome();
     }
+
+    public Long getId() {
+        return usuario.getId();
+    }
 }

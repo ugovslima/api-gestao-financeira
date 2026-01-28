@@ -1,6 +1,7 @@
 package com.api_gestao_financeira.transaction_api.infra.controller;
 
 import com.api.gestaofinanceira.common.enums.FormaPagamento;
+import com.api_gestao_financeira.transaction_api.application.auth.UsuarioAutenticado;
 import com.api_gestao_financeira.transaction_api.application.dto.RelatorioDespesas;
 import com.api_gestao_financeira.transaction_api.application.dto.RelatorioDespesasPlanilha;
 import com.api_gestao_financeira.transaction_api.application.dto.TipoPeriodo;
@@ -10,6 +11,7 @@ import com.api_gestao_financeira.transaction_api.infra.gateway.RelatorioDespesas
 import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -32,7 +34,7 @@ public class RelatorioController {
 
     @GetMapping("/resumo")
     public ResponseEntity<RelatorioDespesas> gerarResumo(
-            @RequestParam Long usuarioId,
+            @AuthenticationPrincipal UsuarioAutenticado usuarioAutenticado,
             @RequestParam
             @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
             LocalDate dataReferencia,
@@ -42,7 +44,7 @@ public class RelatorioController {
 
         RelatorioDespesas resumo =
                 gerarRelatorioDespesasUseCase.executar(
-                        usuarioId,
+                        usuarioAutenticado.getId(),
                         dataReferencia,
                         tipoPeriodo,
                         formaPagamento
@@ -53,11 +55,11 @@ public class RelatorioController {
 
     @GetMapping("/excel")
     public void gerarExcel(
-            @RequestParam Long usuarioId,
+            @AuthenticationPrincipal UsuarioAutenticado usuarioAutenticado,
             @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate dataReferencia,
             HttpServletResponse response
     ) throws Exception {
-        RelatorioDespesasPlanilha relatorio = gerarRelatorioDespesasPlanilhaUseCase.executar(usuarioId, dataReferencia);
+        RelatorioDespesasPlanilha relatorio = gerarRelatorioDespesasPlanilhaUseCase.executar(usuarioAutenticado.getId(), dataReferencia);
 
         response.setContentType("application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
         YearMonth ym = YearMonth.from(dataReferencia);

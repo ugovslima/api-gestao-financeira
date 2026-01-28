@@ -1,6 +1,7 @@
 package com.api_gestao_financeira.transaction_api.infra.controller;
 
 import com.api.gestaofinanceira.common.enums.FormaPagamento;
+import com.api_gestao_financeira.transaction_api.application.auth.UsuarioAutenticado;
 import com.api_gestao_financeira.transaction_api.application.dto.RelatorioDespesas;
 import com.api_gestao_financeira.transaction_api.application.dto.TipoPeriodo;
 import com.api_gestao_financeira.transaction_api.application.usecase.BuscarTransacaoPorIdUseCase;
@@ -13,7 +14,9 @@ import com.api_gestao_financeira.transaction_api.infra.dto.CriarTransacaoRequest
 import com.api_gestao_financeira.transaction_api.infra.dto.TransacaoProcessadaResponse;
 import com.api_gestao_financeira.transaction_api.infra.dto.TransacaoResponse;
 import com.api_gestao_financeira.transaction_api.infra.persistence.mapper.TransacaoMapper;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDate;
@@ -36,9 +39,14 @@ public class TransacaoController {
     }
 
     @PostMapping()
-    public ResponseEntity<TransacaoResponse> criar(@RequestBody CriarTransacaoRequest request) {
+    public ResponseEntity<TransacaoResponse> criar(
+            @AuthenticationPrincipal UsuarioAutenticado usuarioAutenticado,
+            @RequestBody CriarTransacaoRequest request) {
+
+        Long usuarioId = usuarioAutenticado.getId();
+
         var transacao = criarTransacaoPendenteUseCase.executar(
-                request.usuarioId(),
+                usuarioId,
                 request.formaPagamento(),
                 request.valor(),
                 null,
@@ -52,9 +60,13 @@ public class TransacaoController {
     }
 
     @PostMapping("/registrar")
-    public ResponseEntity<TransacaoResponse> registrar(@RequestBody CriarRegistroRequest request) {
+    public ResponseEntity<TransacaoResponse> registrar(
+            @AuthenticationPrincipal UsuarioAutenticado usuarioAutenticado,
+            @RequestBody CriarRegistroRequest request) {
+
+        Long usuarioId = usuarioAutenticado.getId();
         var transacao = criarRegistroUseCase.executar(
-                request.usuarioId(),
+                usuarioId,
                 request.formaPagamento(),
                 request.valor(),
                 request.data(),
@@ -63,13 +75,21 @@ public class TransacaoController {
                 request.banco(),
                 request.moeda()
         );
-
         return ResponseEntity.ok(TransacaoMapper.toResponse(transacao));
     }
 
     @GetMapping("/{transacaoId}")
-    public ResponseEntity<TransacaoProcessadaResponse> buscar(@PathVariable Long transacaoId){
+    public ResponseEntity<TransacaoProcessadaResponse> buscar(
+            @AuthenticationPrincipal UsuarioAutenticado usuarioAutenticado,
+            @PathVariable Long transacaoId) {
+
+        Long usuarioId = usuarioAutenticado.getId();
         Transacao transacao = buscarTransacaoPorIdUseCase.executar(transacaoId);
+
+        if (!transacao.getUsuarioId().equals(usuarioId)) {
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
+        }
+
         return ResponseEntity.ok(TransacaoMapper.toProcessadaResponse(transacao));
     }
 

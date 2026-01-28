@@ -16,6 +16,8 @@ public class JwtTokenProvider {
             String token = JWT.create()
                     .withIssuer("api-gestao-financeira")
                     .withSubject(usuario.getUsername())
+                    .withClaim("id", usuario.getId())
+                    .withClaim("name", usuario.getUsername())
                     .sign(algorithm);
             return token;
         } catch (JWTCreationException e){
@@ -32,7 +34,7 @@ public class JwtTokenProvider {
                     .verify(token)
                     .getSubject();
         } catch (JWTVerificationException exception){
-            return "invalide token";
+            return "Token invalido";
         }
     }
 }
