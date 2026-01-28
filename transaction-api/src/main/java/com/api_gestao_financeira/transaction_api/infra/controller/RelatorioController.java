@@ -9,9 +9,11 @@ import com.api_gestao_financeira.transaction_api.application.usecase.GerarRelato
 import com.api_gestao_financeira.transaction_api.application.usecase.GerarRelatorioDespesasUseCase;
 import com.api_gestao_financeira.transaction_api.infra.gateway.RelatorioDespesasPlanilhaExporter;
 import jakarta.servlet.http.HttpServletResponse;
+import jakarta.validation.constraints.NotNull;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -21,6 +23,7 @@ import java.time.LocalDate;
 import java.time.YearMonth;
 
 @RestController
+@Validated
 @RequestMapping("/relatorios")
 public class RelatorioController {
 
@@ -35,10 +38,11 @@ public class RelatorioController {
     @GetMapping("/resumo")
     public ResponseEntity<RelatorioDespesas> gerarResumo(
             @AuthenticationPrincipal UsuarioAutenticado usuarioAutenticado,
+            @NotNull
             @RequestParam
             @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
             LocalDate dataReferencia,
-            @RequestParam TipoPeriodo tipoPeriodo,
+            @NotNull @RequestParam TipoPeriodo tipoPeriodo,
             @RequestParam(required = false) FormaPagamento formaPagamento
     ) {
 
@@ -56,7 +60,7 @@ public class RelatorioController {
     @GetMapping("/excel")
     public void gerarExcel(
             @AuthenticationPrincipal UsuarioAutenticado usuarioAutenticado,
-            @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate dataReferencia,
+            @NotNull @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate dataReferencia,
             HttpServletResponse response
     ) throws Exception {
         RelatorioDespesasPlanilha relatorio = gerarRelatorioDespesasPlanilhaUseCase.executar(usuarioAutenticado.getId(), dataReferencia);

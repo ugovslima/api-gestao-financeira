@@ -24,24 +24,22 @@ public class FiltroAuthJwt extends OncePerRequestFilter {
     @Override
     protected void doFilterInternal(HttpServletRequest request,
                                     HttpServletResponse response,
-                                    FilterChain filterChain) throws ServletException, IOException {
+                                    FilterChain filterChain)
+            throws ServletException, IOException {
+
         String cabecalho = request.getHeader("Authorization");
 
         if (cabecalho != null && cabecalho.startsWith("Bearer ")) {
             String token = cabecalho.substring(7);
 
-            try {
-                UsuarioAutenticado usuario = provedorTokenJwt.validarUsuario(token);
+            UsuarioAutenticado usuario = provedorTokenJwt.validarUsuario(token);
 
-                UsernamePasswordAuthenticationToken autenticacao =
-                        new UsernamePasswordAuthenticationToken(usuario, null, Collections.emptyList());
+            UsernamePasswordAuthenticationToken autenticacao =
+                    new UsernamePasswordAuthenticationToken(
+                            usuario, null, Collections.emptyList()
+                    );
 
-                SecurityContextHolder.getContext().setAuthentication(autenticacao);
-
-            } catch (RuntimeException ex) {
-                response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "Token inválido ou expirado");
-                return;
-            }
+            SecurityContextHolder.getContext().setAuthentication(autenticacao);
         }
 
         filterChain.doFilter(request, response);

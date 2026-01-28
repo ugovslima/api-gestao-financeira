@@ -8,20 +8,20 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 @RestController
-@RequestMapping("/usuarios")
+@RequestMapping("/registrar")
 public class UsuarioController {
 
     @Autowired
     private UsuarioService usuarioService;
 
-    @PostMapping("/registrar")
+    @PostMapping
     public ResponseEntity registrar(@RequestBody LoginDto dto) {
         usuarioService.registrar(dto);
         System.out.println(dto);
         return ResponseEntity.status(201).build();
     }
 
-    @PostMapping("/registrar/lote")
+    @PostMapping("/lote")
     public ResponseEntity<?> registrarEmLote(@RequestParam("file") MultipartFile file) {
 
         usuarioService.registrarEmLoteCsv(file);

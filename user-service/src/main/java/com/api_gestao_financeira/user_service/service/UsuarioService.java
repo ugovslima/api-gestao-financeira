@@ -39,7 +39,7 @@ public class UsuarioService {
             }
 
         } catch (Exception e) {
-            throw new RuntimeException("Erro ao processar CSV", e);
+            throw new RuntimeException("Erro ao processar CSV, confira o formato do arquivo.", e);
         }
     }
 

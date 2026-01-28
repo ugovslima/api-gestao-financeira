@@ -14,6 +14,7 @@ import com.api_gestao_financeira.transaction_api.infra.dto.CriarTransacaoRequest
 import com.api_gestao_financeira.transaction_api.infra.dto.TransacaoProcessadaResponse;
 import com.api_gestao_financeira.transaction_api.infra.dto.TransacaoResponse;
 import com.api_gestao_financeira.transaction_api.infra.persistence.mapper.TransacaoMapper;
+import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -28,20 +29,18 @@ public class TransacaoController {
     private final CriarTransacaoPendenteUseCase criarTransacaoPendenteUseCase;
     private final BuscarTransacaoPorIdUseCase buscarTransacaoPorIdUseCase;
     private final CriarRegistroUseCase criarRegistroUseCase;
-    private final GerarRelatorioDespesasUseCase gerarRelatorioDespesasUseCase;
 
     public TransacaoController(CriarTransacaoPendenteUseCase criarTransacaoPendenteUseCase,
                                BuscarTransacaoPorIdUseCase buscarTransacaoPorIdUseCase, CriarRegistroUseCase criarRegistroUseCase, GerarRelatorioDespesasUseCase gerarRelatorioDespesasUseCase) {
         this.criarTransacaoPendenteUseCase = criarTransacaoPendenteUseCase;
         this.buscarTransacaoPorIdUseCase = buscarTransacaoPorIdUseCase;
         this.criarRegistroUseCase = criarRegistroUseCase;
-        this.gerarRelatorioDespesasUseCase = gerarRelatorioDespesasUseCase;
     }
 
     @PostMapping()
     public ResponseEntity<TransacaoResponse> criar(
             @AuthenticationPrincipal UsuarioAutenticado usuarioAutenticado,
-            @RequestBody CriarTransacaoRequest request) {
+            @Valid @RequestBody CriarTransacaoRequest request) {
 
         Long usuarioId = usuarioAutenticado.getId();
 
@@ -56,13 +55,13 @@ public class TransacaoController {
                 request.moeda()
         );
 
-        return ResponseEntity.ok(TransacaoMapper.toResponse(transacao));
+        return ResponseEntity.status(202).body(TransacaoMapper.toResponse(transacao));
     }
 
     @PostMapping("/registrar")
     public ResponseEntity<TransacaoResponse> registrar(
             @AuthenticationPrincipal UsuarioAutenticado usuarioAutenticado,
-            @RequestBody CriarRegistroRequest request) {
+            @Valid @RequestBody CriarRegistroRequest request) {
 
         Long usuarioId = usuarioAutenticado.getId();
         var transacao = criarRegistroUseCase.executar(
@@ -75,7 +74,7 @@ public class TransacaoController {
                 request.banco(),
                 request.moeda()
         );
-        return ResponseEntity.ok(TransacaoMapper.toResponse(transacao));
+        return ResponseEntity.status(201).body(TransacaoMapper.toResponse(transacao));
     }
 
     @GetMapping("/{transacaoId}")

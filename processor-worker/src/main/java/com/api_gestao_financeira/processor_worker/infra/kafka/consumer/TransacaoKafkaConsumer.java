@@ -16,10 +16,8 @@ public class TransacaoKafkaConsumer {
         this.useCase = useCase;
     }
 
-    @KafkaListener(
-            topics = "transacao",
-            containerFactory = "kafkaListenerContainerFactory"
-    )
+    @KafkaListener(topics = "transacao",
+            containerFactory = "kafkaListenerContainerFactory")
     public void consumir(TransacaoEvento evento) {
 
         Transacao transacao =
