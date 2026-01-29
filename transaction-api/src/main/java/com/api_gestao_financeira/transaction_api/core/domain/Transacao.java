@@ -152,4 +152,5 @@ public class Transacao {
         return status == StatusTransacao.APROVADA
                 || status == StatusTransacao.REGISTRADA;
     }
+
 }

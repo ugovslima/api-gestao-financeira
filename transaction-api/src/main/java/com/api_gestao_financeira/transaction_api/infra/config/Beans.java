@@ -11,12 +11,12 @@ import org.springframework.context.annotation.Configuration;
 public class Beans {
 
     @Bean
-    public CriarTransacaoPendenteUseCase criarTransacaoUseCase(
+    public CriarTransacaoUseCase criarTransacaoUseCase(
             TransacaoGateway transacaoGateway,
             PublicarTransacaoGateway publicarTransacaoGateway,
             CambioGateway cambioGateway
     ) {
-        return new CriarTransacaoPendenteUseCase(transacaoGateway, publicarTransacaoGateway, cambioGateway);
+        return new CriarTransacaoUseCase(transacaoGateway, publicarTransacaoGateway, cambioGateway);
     }
 
     @Bean

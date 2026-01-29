@@ -13,13 +13,13 @@ import com.api_gestao_financeira.transaction_api.core.valueObjects.Parcelas;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 
-public class CriarTransacaoPendenteUseCase {
+public class CriarTransacaoUseCase {
 
     private final TransacaoGateway transacaoGateway;
     private final PublicarTransacaoGateway publicarTransacaoGateway;
     private final CambioGateway cambioGateway;
 
-    public CriarTransacaoPendenteUseCase(TransacaoGateway transacaoGateway, PublicarTransacaoGateway publicarTransacaoGateway, CambioGateway cambioGateway) {
+    public CriarTransacaoUseCase(TransacaoGateway transacaoGateway, PublicarTransacaoGateway publicarTransacaoGateway, CambioGateway cambioGateway) {
         this.transacaoGateway = transacaoGateway;
         this.publicarTransacaoGateway = publicarTransacaoGateway;
         this.cambioGateway = cambioGateway;
@@ -43,7 +43,24 @@ public class CriarTransacaoPendenteUseCase {
         Cambio cambio = Cambio.criar(moeda, taxa);
         BigDecimal valorEmReais = valor.multiply(cambio.getTaxa());
 
-        Transacao transacao = Transacao.criarPendente (
+        Transacao transacao;
+
+        if (formaPagamento == FormaPagamento.DINHEIRO) {
+            transacao = Transacao.registrar(
+                    usuarioId,
+                    formaPagamento,
+                    valorEmReais,
+                    dataTransacao,
+                    descricao,
+                    Parcelas.criar(formaPagamento, parcelas),
+                    banco,
+                    cambio
+            );
+
+            return transacaoGateway.salvar(transacao);
+        }
+
+        transacao = Transacao.criarPendente(
                 usuarioId,
                 formaPagamento,
                 valorEmReais,

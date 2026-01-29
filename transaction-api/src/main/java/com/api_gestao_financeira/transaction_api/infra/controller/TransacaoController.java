@@ -3,7 +3,7 @@ package com.api_gestao_financeira.transaction_api.infra.controller;
 import com.api_gestao_financeira.transaction_api.application.auth.UsuarioAutenticado;
 import com.api_gestao_financeira.transaction_api.application.usecase.BuscarTransacaoPorIdUseCase;
 import com.api_gestao_financeira.transaction_api.application.usecase.CriarRegistroUseCase;
-import com.api_gestao_financeira.transaction_api.application.usecase.CriarTransacaoPendenteUseCase;
+import com.api_gestao_financeira.transaction_api.application.usecase.CriarTransacaoUseCase;
 import com.api_gestao_financeira.transaction_api.application.usecase.GerarRelatorioDespesasUseCase;
 import com.api_gestao_financeira.transaction_api.core.domain.Transacao;
 import com.api_gestao_financeira.transaction_api.infra.dto.CriarRegistroRequest;
@@ -17,19 +17,17 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
-import java.time.LocalDate;
-
 @RestController
 @RequestMapping("/transacoes")
 public class TransacaoController {
 
-    private final CriarTransacaoPendenteUseCase criarTransacaoPendenteUseCase;
+    private final CriarTransacaoUseCase criarTransacaoUseCase;
     private final BuscarTransacaoPorIdUseCase buscarTransacaoPorIdUseCase;
     private final CriarRegistroUseCase criarRegistroUseCase;
 
-    public TransacaoController(CriarTransacaoPendenteUseCase criarTransacaoPendenteUseCase,
+    public TransacaoController(CriarTransacaoUseCase criarTransacaoUseCase,
                                BuscarTransacaoPorIdUseCase buscarTransacaoPorIdUseCase, CriarRegistroUseCase criarRegistroUseCase, GerarRelatorioDespesasUseCase gerarRelatorioDespesasUseCase) {
-        this.criarTransacaoPendenteUseCase = criarTransacaoPendenteUseCase;
+        this.criarTransacaoUseCase = criarTransacaoUseCase;
         this.buscarTransacaoPorIdUseCase = buscarTransacaoPorIdUseCase;
         this.criarRegistroUseCase = criarRegistroUseCase;
     }
@@ -41,7 +39,7 @@ public class TransacaoController {
 
         Long usuarioId = usuarioAutenticado.getId();
 
-        var transacao = criarTransacaoPendenteUseCase.executar(
+        var transacao = criarTransacaoUseCase.executar(
                 usuarioId,
                 request.formaPagamento(),
                 request.valor(),

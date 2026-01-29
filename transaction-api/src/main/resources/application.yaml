@@ -23,8 +23,3 @@ spring:
 
   kafka:
     bootstrap-servers: localhost:9092
-
-  mvc:
-    produces: application/json
-    contentnegotiation:
-      favor-path-extension: false
