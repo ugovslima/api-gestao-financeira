@@ -1,11 +1,11 @@
 package com.api_gestao_financeira.processor_worker.application.usecase;
 
-import com.api.gestaofinanceira.common.enums.FormaPagamento;
-import com.api.gestaofinanceira.common.enums.StatusTransacao;
 import com.api_gestao_financeira.processor_worker.application.dto.SaldoLimite;
 import com.api_gestao_financeira.processor_worker.application.gateway.SaldoLimiteGateway;
 import com.api_gestao_financeira.processor_worker.application.gateway.TransacaoRepository;
 import com.api_gestao_financeira.processor_worker.core.domain.Transacao;
+import com.api_gestao_financeira.processor_worker.core.enums.FormaPagamento;
+import com.api_gestao_financeira.processor_worker.core.enums.StatusTransacao;
 
 import java.math.BigDecimal;
 

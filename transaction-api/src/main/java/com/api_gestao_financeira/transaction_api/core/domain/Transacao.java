@@ -1,8 +1,8 @@
 package com.api_gestao_financeira.transaction_api.core.domain;
 
-import com.api.gestaofinanceira.common.enums.Banco;
-import com.api.gestaofinanceira.common.enums.FormaPagamento;
-import com.api.gestaofinanceira.common.enums.StatusTransacao;
+import com.api_gestao_financeira.transaction_api.core.enums.Banco;
+import com.api_gestao_financeira.transaction_api.core.enums.FormaPagamento;
+import com.api_gestao_financeira.transaction_api.core.enums.StatusTransacao;
 import com.api_gestao_financeira.transaction_api.core.valueObjects.Cambio;
 import com.api_gestao_financeira.transaction_api.core.valueObjects.Parcelas;
 

@@ -1,10 +1,10 @@
 package com.api_gestao_financeira.transaction_api.application.usecase;
 
-import com.api.gestaofinanceira.common.enums.FormaPagamento;
 import com.api_gestao_financeira.transaction_api.application.dto.RelatorioDespesas;
 import com.api_gestao_financeira.transaction_api.application.dto.TipoPeriodo;
 import com.api_gestao_financeira.transaction_api.application.gateway.TransacaoGateway;
 import com.api_gestao_financeira.transaction_api.core.domain.Transacao;
+import com.api_gestao_financeira.transaction_api.core.enums.FormaPagamento;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;

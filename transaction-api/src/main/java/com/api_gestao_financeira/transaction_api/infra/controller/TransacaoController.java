@@ -1,9 +1,6 @@
 package com.api_gestao_financeira.transaction_api.infra.controller;
 
-import com.api.gestaofinanceira.common.enums.FormaPagamento;
 import com.api_gestao_financeira.transaction_api.application.auth.UsuarioAutenticado;
-import com.api_gestao_financeira.transaction_api.application.dto.RelatorioDespesas;
-import com.api_gestao_financeira.transaction_api.application.dto.TipoPeriodo;
 import com.api_gestao_financeira.transaction_api.application.usecase.BuscarTransacaoPorIdUseCase;
 import com.api_gestao_financeira.transaction_api.application.usecase.CriarRegistroUseCase;
 import com.api_gestao_financeira.transaction_api.application.usecase.CriarTransacaoPendenteUseCase;

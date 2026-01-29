@@ -1,4 +1,4 @@
-package com.api.gestaofinanceira.common.enums;
+package com.api_gestao_financeira.processor_worker.core.enums;
 
 public enum Banco {
     ITAU,

@@ -1,6 +1,6 @@
 package com.api_gestao_financeira.transaction_api.core.valueObjects;
 
-import com.api.gestaofinanceira.common.enums.FormaPagamento;
+import com.api_gestao_financeira.transaction_api.core.enums.FormaPagamento;
 
 public class Parcelas {
 

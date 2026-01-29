@@ -1,9 +1,9 @@
 package com.api_gestao_financeira.transaction_api.infra.persistence.entity;
 
-import com.api.gestaofinanceira.common.enums.Banco;
-import com.api.gestaofinanceira.common.enums.FormaPagamento;
-import com.api.gestaofinanceira.common.enums.StatusTransacao;
+import com.api_gestao_financeira.transaction_api.core.enums.Banco;
+import com.api_gestao_financeira.transaction_api.core.enums.FormaPagamento;
 import com.api_gestao_financeira.transaction_api.core.enums.Moeda;
+import com.api_gestao_financeira.transaction_api.core.enums.StatusTransacao;
 import jakarta.persistence.*;
 
 import java.math.BigDecimal;

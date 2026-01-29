@@ -1,6 +1,6 @@
 package com.api_gestao_financeira.processor_worker.infra.persistence.repository;
 
-import com.api.gestaofinanceira.common.enums.StatusTransacao;
+import com.api_gestao_financeira.processor_worker.core.enums.StatusTransacao;
 import com.api_gestao_financeira.processor_worker.infra.persistence.entity.TransacaoEntity;
 import jakarta.transaction.Transactional;
 import org.springframework.data.jpa.repository.JpaRepository;

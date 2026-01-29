@@ -1,7 +1,7 @@
 package com.api_gestao_financeira.transaction_api.application.gateway;
 
-import com.api.gestaofinanceira.common.enums.FormaPagamento;
 import com.api_gestao_financeira.transaction_api.core.domain.Transacao;
+import com.api_gestao_financeira.transaction_api.core.enums.FormaPagamento;
 
 import java.time.LocalDate;
 import java.util.List;

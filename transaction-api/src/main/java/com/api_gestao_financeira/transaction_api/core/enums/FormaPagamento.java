@@ -1,4 +1,4 @@
-package com.api.gestaofinanceira.common.enums;
+package com.api_gestao_financeira.transaction_api.core.enums;
 
 public enum FormaPagamento {
     CREDITO,

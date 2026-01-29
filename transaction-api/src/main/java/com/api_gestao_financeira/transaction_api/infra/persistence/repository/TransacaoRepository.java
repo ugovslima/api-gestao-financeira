@@ -1,6 +1,6 @@
 package com.api_gestao_financeira.transaction_api.infra.persistence.repository;
 
-import com.api.gestaofinanceira.common.enums.FormaPagamento;
+import com.api_gestao_financeira.transaction_api.core.enums.FormaPagamento;
 import com.api_gestao_financeira.transaction_api.infra.persistence.entity.TransacaoEntity;
 import org.springframework.data.jpa.repository.JpaRepository;
 

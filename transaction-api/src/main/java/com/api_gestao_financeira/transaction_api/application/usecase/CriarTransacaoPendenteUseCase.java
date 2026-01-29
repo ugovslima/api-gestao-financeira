@@ -4,8 +4,8 @@ import com.api_gestao_financeira.transaction_api.application.gateway.CambioGatew
 import com.api_gestao_financeira.transaction_api.application.gateway.PublicarTransacaoGateway;
 import com.api_gestao_financeira.transaction_api.application.gateway.TransacaoGateway;
 import com.api_gestao_financeira.transaction_api.core.domain.Transacao;
-import com.api.gestaofinanceira.common.enums.Banco;
-import com.api.gestaofinanceira.common.enums.FormaPagamento;
+import com.api_gestao_financeira.transaction_api.core.enums.Banco;
+import com.api_gestao_financeira.transaction_api.core.enums.FormaPagamento;
 import com.api_gestao_financeira.transaction_api.core.enums.Moeda;
 import com.api_gestao_financeira.transaction_api.core.valueObjects.Cambio;
 import com.api_gestao_financeira.transaction_api.core.valueObjects.Parcelas;

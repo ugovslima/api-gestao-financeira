@@ -1,8 +1,8 @@
 package com.api_gestao_financeira.transaction_api.infra.gateway;
 
-import com.api.gestaofinanceira.common.enums.FormaPagamento;
 import com.api_gestao_financeira.transaction_api.application.gateway.TransacaoGateway;
 import com.api_gestao_financeira.transaction_api.core.domain.Transacao;
+import com.api_gestao_financeira.transaction_api.core.enums.FormaPagamento;
 import com.api_gestao_financeira.transaction_api.infra.persistence.entity.TransacaoEntity;
 import com.api_gestao_financeira.transaction_api.infra.persistence.mapper.TransacaoMapper;
 import com.api_gestao_financeira.transaction_api.infra.persistence.repository.TransacaoRepository;
