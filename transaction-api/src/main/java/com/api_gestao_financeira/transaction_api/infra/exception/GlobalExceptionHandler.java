@@ -15,40 +15,42 @@ import java.util.Map;
 @RestControllerAdvice
 public class GlobalExceptionHandler {
 
-    private ResponseEntity<Map<String, Object>> buildResponse(HttpStatus status, String message) {
-        Map<String, Object> body = new HashMap<>();
-        body.put("timestamp", LocalDateTime.now());
-        body.put("status", status.value());
-        body.put("error", status.getReasonPhrase());
-        body.put("message", message);
+    private ResponseEntity<ErrorResponse> buildResponse(HttpStatus status, String message) {
+        ErrorResponse body = new ErrorResponse(
+                LocalDateTime.now(),
+                status.value(),
+                status.getReasonPhrase(),
+                message
+        );
+
         return new ResponseEntity<>(body, status);
     }
 
     @ExceptionHandler(IllegalArgumentException.class)
-    public ResponseEntity<Map<String, Object>> handleIllegalArgument(IllegalArgumentException ex) {
+    public ResponseEntity<ErrorResponse> handleIllegalArgument(IllegalArgumentException ex) {
         return buildResponse(HttpStatus.BAD_REQUEST, ex.getMessage());
     }
 
     @ExceptionHandler(RestClientException.class)
-    public ResponseEntity<Map<String, Object>> handleRestClient(Exception ex) {
+    public ResponseEntity<ErrorResponse> handleRestClient(Exception ex) {
         return buildResponse(HttpStatus.BAD_GATEWAY, "Erro ao comunicar com serviço externo");
     }
 
     @ExceptionHandler(RuntimeException.class)
-    public ResponseEntity<Map<String, Object>> handleGeneric(Exception ex) {
+    public ResponseEntity<ErrorResponse> handleGeneric(Exception ex) {
         return buildResponse(HttpStatus.INTERNAL_SERVER_ERROR, "Erro interno"
         );
     }
 
     @ExceptionHandler(MethodArgumentNotValidException.class)
-    public ResponseEntity<Map<String, Object>> handleValidation(MethodArgumentNotValidException ex) {
+    public ResponseEntity<ErrorResponse> handleValidation(MethodArgumentNotValidException ex) {
         return buildResponse(HttpStatus.BAD_REQUEST, "Parâmetros inválidos");
     }
 
     @ExceptionHandler(MissingServletRequestParameterException.class)
-    public ResponseEntity<Map<String, Object>> handleMissingParam(
+    public ResponseEntity<ErrorResponse> handleMissingParam(
             MissingServletRequestParameterException ex) {
-        return buildResponse(HttpStatus.BAD_REQUEST,
-                "Parâmetro obrigatório ausente");
+        return buildResponse(HttpStatus.BAD_REQUEST, "Parâmetro obrigatório ausente");
     }
+
 }

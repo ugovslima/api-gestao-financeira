@@ -23,3 +23,8 @@ spring:
 
   kafka:
     bootstrap-servers: localhost:9092
+
+springdoc:
+  swagger-ui:
+    path: /swagger-ui.html
+  override-with-generic-response: false

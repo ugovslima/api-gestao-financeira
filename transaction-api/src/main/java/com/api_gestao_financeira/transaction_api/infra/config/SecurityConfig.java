@@ -13,27 +13,39 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 
 @Configuration
 @EnableWebSecurity
-@EnableMethodSecurity
 public class SecurityConfig {
 
-    private final ProvedorTokenJwt provedorTokenJwt;
+    private final FiltroAuthJwt filtroJwt;
 
-    public SecurityConfig(ProvedorTokenJwt provedorTokenJwt) {
-        this.provedorTokenJwt = provedorTokenJwt;
+    public SecurityConfig(FiltroAuthJwt filtroJwt) {
+        this.filtroJwt = filtroJwt;
     }
 
     @Bean
     public SecurityFilterChain filtroSeguranca(HttpSecurity http) throws Exception {
-        FiltroAuthJwt filtroJwt = new FiltroAuthJwt(provedorTokenJwt);
         return http
                 .csrf(csrf -> csrf.disable())
                 .sessionManagement(s -> s.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(autorizacoes -> autorizacoes
-                        .requestMatchers("/swagger-ui/index.html", "/swagger-ui/**", "/v3/api-docs/**").permitAll()
+                        .requestMatchers(
+                                "/swagger-ui/**",
+                                "/swagger-ui.html",
+                                "/v3/api-docs/**",
+                                "/swagger-resources/**",
+                                "/webjars/**"
+                        ).permitAll()
                         .anyRequest().authenticated()
                 )
                 .addFilterBefore(filtroJwt, UsernamePasswordAuthenticationFilter.class)
                 .build();
+    }
+
+    @Bean
+    public WebSecurityCustomizer webSecurityCustomizer() {
+        return web -> web.ignoring().requestMatchers(
+                "/swagger-ui/**",
+                "/v3/api-docs/**"
+        );
     }
 
 }

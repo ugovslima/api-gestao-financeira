@@ -11,12 +11,19 @@ import com.api_gestao_financeira.transaction_api.infra.dto.CriarTransacaoRequest
 import com.api_gestao_financeira.transaction_api.infra.dto.TransacaoProcessadaResponse;
 import com.api_gestao_financeira.transaction_api.infra.dto.TransacaoResponse;
 import com.api_gestao_financeira.transaction_api.infra.persistence.mapper.TransacaoMapper;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
+@Tag(name = "Transações", description = "Operações de criação, registro e consulta de transações financeiras")
+@SecurityRequirement(name = "bearer-key")
 @RestController
 @RequestMapping("/transacoes")
 public class TransacaoController {
@@ -32,6 +39,11 @@ public class TransacaoController {
         this.criarRegistroUseCase = criarRegistroUseCase;
     }
 
+    @Operation(
+            summary = "Criar transação",
+            description = "Cria uma nova transação para analise no processor worker. O usuário é definido pelo token JWT"
+    )
+    @ApiResponse(responseCode = "202", description = "Transação criada e encaminhada para ser processada com sucesso")
     @PostMapping()
     public ResponseEntity<TransacaoResponse> criar(
             @AuthenticationPrincipal UsuarioAutenticado usuarioAutenticado,
@@ -53,6 +65,13 @@ public class TransacaoController {
         return ResponseEntity.status(202).body(TransacaoMapper.toResponse(transacao));
     }
 
+    @Operation(
+            summary = "Registrar transação manual",
+            description = "Registra uma transação informando a data manualmente. O usuário é definido pelo token JWT" +
+                    "Caso 'parcelas' seja null será considerado 1. " +
+                    "Caso 'moeda' seja null será considerado BRL."
+    )
+    @ApiResponse(responseCode = "201", description = "Registro criado com sucesso")
     @PostMapping("/registrar")
     public ResponseEntity<TransacaoResponse> registrar(
             @AuthenticationPrincipal UsuarioAutenticado usuarioAutenticado,
@@ -72,6 +91,12 @@ public class TransacaoController {
         return ResponseEntity.status(201).body(TransacaoMapper.toResponse(transacao));
     }
 
+    @Operation(
+            summary = "Buscar transação por ID",
+            description = "Retorna os detalhes de uma transação do usuário autenticado. " +
+                    "Caso a transação não pertença ao usuário, será retornado 403."
+    )
+    @ApiResponse(responseCode = "202", description = "Registro criado com sucesso")
     @GetMapping("/{transacaoId}")
     public ResponseEntity<TransacaoProcessadaResponse> buscar(
             @AuthenticationPrincipal UsuarioAutenticado usuarioAutenticado,
