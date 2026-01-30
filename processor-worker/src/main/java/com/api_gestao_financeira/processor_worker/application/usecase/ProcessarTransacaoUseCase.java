@@ -29,15 +29,8 @@ public class ProcessarTransacaoUseCase {
             return;
         }
 
-        if (transacao.getFormaPagamento() == FormaPagamento.DINHEIRO) {
-            transacao.aprovarStatus();
-            transacao.setMotivo("Transação em dinheiro - aprovada automaticamente");
-            transacaoRepository.atualizar(transacao);
-            return;
-        }
-
-        SaldoLimite saldoLimite =
-                saldoLimiteGateway.consultarPorBanco(transacao.getBanco().name());
+        SaldoLimite saldoLimite = saldoLimiteGateway.consultarPorBanco(
+                transacao.getBanco().name(), transacao.getUsuarioId());
 
         if (transacao.getFormaPagamento() == FormaPagamento.CREDITO) {
 

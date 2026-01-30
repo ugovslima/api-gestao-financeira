@@ -1,3 +1,4 @@
+transaction yml:
 server:
   port: 8081
 
@@ -6,9 +7,9 @@ spring:
     name: transaction-api
 
   datasource:
-    url: jdbc:postgresql://localhost:5433/gestaodb
-    username: devuser
-    password: devuser1234
+    url: ${SPRING_DATASOURCE_URL}
+    username: ${SPRING_DATASOURCE_USERNAME}
+    password: ${SPRING_DATASOURCE_PASSWORD}
     driver-class-name: org.postgresql.Driver
 
   jpa:
@@ -22,9 +23,4 @@ spring:
     baseline-on-migrate: true
 
   kafka:
-    bootstrap-servers: localhost:9092
-
-springdoc:
-  swagger-ui:
-    path: /swagger-ui.html
-  override-with-generic-response: false
+    bootstrap-servers: ${SPRING_KAFKA_BOOTSTRAP_SERVERS}
