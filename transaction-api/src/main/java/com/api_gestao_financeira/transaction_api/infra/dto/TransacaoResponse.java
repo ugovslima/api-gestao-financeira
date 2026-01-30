@@ -20,7 +20,7 @@ import java.time.LocalDate;
       "data": "2026-01-29",
       "descricao": "Pagamento de assinatura",
       "parcelas": 1,
-      "banco": "SICREDI",
+      "banco": "SANTANDER",
       "cambio": {
         "moeda": "BRL",
         "taxa": 0

@@ -21,7 +21,7 @@ import java.time.LocalDate;
       "data": "2026-01-29",
       "descricao": "Compra no mercado",
       "parcelas": 1,
-      "banco": "INTER",
+      "banco": "ITAU",
       "cambio": {
         "moeda": "BRL",
         "taxa": 0
