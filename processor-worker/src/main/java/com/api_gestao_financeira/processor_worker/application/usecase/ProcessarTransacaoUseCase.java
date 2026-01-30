@@ -47,7 +47,7 @@ public class ProcessarTransacaoUseCase {
             return;
         }
 
-        if (transacao.getFormaPagamento() == FormaPagamento.DEBITO) {
+        if (transacao.getFormaPagamento() == FormaPagamento.DEBITO || transacao.getFormaPagamento() == FormaPagamento.PIX) {
 
             if (saldoLimite.saldo().compareTo(transacao.getValor()) >= 0) {
                 BigDecimal saldoRestante =
@@ -64,24 +64,6 @@ public class ProcessarTransacaoUseCase {
 
             transacaoRepository.atualizar(transacao);
             return;
-        }
-
-        if (transacao.getFormaPagamento() == FormaPagamento.PIX) {
-
-            if (saldoLimite.saldo().compareTo(transacao.getValor()) >= 0) {
-                BigDecimal saldoRestante =
-                        saldoLimite.saldo().subtract(transacao.getValor());
-
-                transacao.aprovarStatus();
-                transacao.setMotivo(
-                        "Saldo após compra: " + saldoRestante
-                );
-            } else {
-                transacao.recusarStatus();
-                transacao.setMotivo("Saldo insuficiente. Saldo atual: " + saldoLimite.saldo());
-            }
-
-            transacaoRepository.atualizar(transacao);
         }
     }
 }

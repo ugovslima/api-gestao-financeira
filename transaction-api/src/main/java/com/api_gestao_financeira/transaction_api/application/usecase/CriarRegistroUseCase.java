@@ -48,6 +48,21 @@ public class CriarRegistroUseCase {
         Cambio cambio = Cambio.criar(moedaFinal, taxa);
         BigDecimal valorEmReais = valor.multiply(cambio.getTaxa());
 
+        if (formaPagamento == FormaPagamento.DINHEIRO) {
+            Transacao transacao = Transacao.registrar(
+                    usuarioId,
+                    formaPagamento,
+                    valorEmReais,
+                    data,
+                    descricao,
+                    Parcelas.criar(formaPagamento, parcelas),
+                    null,
+                    cambio
+            );
+
+            return transacaoGateway.salvar(transacao);
+        }
+
         Transacao transacao = Transacao.registrar(
                 usuarioId,
                 formaPagamento,

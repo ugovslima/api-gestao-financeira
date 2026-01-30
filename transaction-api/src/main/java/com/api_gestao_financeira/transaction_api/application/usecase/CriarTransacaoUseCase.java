@@ -57,7 +57,7 @@ public class CriarTransacaoUseCase {
                     dataTransacao,
                     descricao,
                     Parcelas.criar(formaPagamento, parcelas),
-                    banco,
+                    null,
                     cambio
             );
 
