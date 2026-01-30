@@ -34,12 +34,18 @@ public class CriarRegistroUseCase {
 
         LocalDate dataCambio = data.minusDays(1);
 
+        while (dataCambio.getDayOfWeek().getValue() >= 6) {
+            dataCambio = dataCambio.minusDays(1);
+        }
+
+        Moeda moedaFinal = moeda == null ? Moeda.BRL : moeda;
+
         BigDecimal taxa = cambioGateway.buscarTaxa(
-                moeda == null ? Moeda.BRL : moeda,
-                data
+                moedaFinal,
+                dataCambio
         );
 
-        Cambio cambio = Cambio.criar(moeda, taxa);
+        Cambio cambio = Cambio.criar(moedaFinal, taxa);
         BigDecimal valorEmReais = valor.multiply(cambio.getTaxa());
 
         Transacao transacao = Transacao.registrar(

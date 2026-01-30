@@ -38,6 +38,10 @@ public class CriarTransacaoUseCase {
         LocalDate dataTransacao = LocalDate.now();
         LocalDate dataCambio = LocalDate.now().minusDays(1);
 
+        while (dataCambio.getDayOfWeek().getValue() >= 6) {
+            dataCambio = dataCambio.minusDays(1);
+        }
+
         BigDecimal taxa = cambioGateway.buscarTaxa(moeda == null ? Moeda.BRL : moeda, dataCambio);
 
         Cambio cambio = Cambio.criar(moeda, taxa);
