@@ -8,6 +8,8 @@ import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -31,27 +33,18 @@ public class UsuarioController {
         return ResponseEntity.status(201).build();
     }
 
-    // A CONSERTAR
-
     @Operation(
             summary = "Registrar usuários em lote",
             description = "Realiza o cadastro de múltiplos usuários via arquivo CSV"
     )
+    @PostMapping(value = "/lote", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     @ApiResponse(responseCode = "201", description = "Usuários registrados com sucesso")
-    @PostMapping(
-            value = "/lote",
-            consumes = "multipart/form-data"
-    )
     public ResponseEntity<Void> registrarEmLote(
-            @Parameter(
-                    description = "Arquivo CSV contendo usuários",
-                    required = true,
-                    schema = @Schema(type = "string", format = "binary")
-            )
-            @RequestParam("file") MultipartFile file
+            @Parameter(description = "Arquivo CSV contendo usuários", required = true)
+            @RequestPart("file") MultipartFile file
     ) {
         usuarioService.registrarEmLoteCsv(file);
-        return ResponseEntity.status(201).build();
+        return ResponseEntity.status(HttpStatus.CREATED).build();
     }
 
 }
