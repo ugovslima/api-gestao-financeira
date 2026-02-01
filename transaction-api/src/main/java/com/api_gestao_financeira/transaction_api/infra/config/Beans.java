@@ -47,4 +47,16 @@ public class Beans {
     ) {
         return new GerarRelatorioDespesasPlanilhaUseCase(transacaoGateway);
     }
+
+    @Bean
+    public BuscarTransacoesPorUsuarioIdUseCase buscarTransacoesDoUsuarioUseCase(
+            TransacaoGateway transacaoGateway) {
+        return new BuscarTransacoesPorUsuarioIdUseCase(transacaoGateway);
+    }
+
+    @Bean
+    public ExcluirTransacaoUseCase excluirTransacaoUseCase(
+            TransacaoGateway transacaoGateway) {
+        return new ExcluirTransacaoUseCase(transacaoGateway);
+    }
 }

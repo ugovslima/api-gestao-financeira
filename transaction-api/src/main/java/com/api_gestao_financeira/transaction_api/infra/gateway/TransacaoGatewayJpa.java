@@ -50,4 +50,18 @@ public class TransacaoGatewayJpa implements TransacaoGateway {
                 .map(TransacaoMapper::toDomain)
                 .toList();
     }
+
+   @Override
+    public List<Transacao> buscarTransacoesPorUsuarioId(Long usuarioId) {
+        List<TransacaoEntity> entities = repository.findByUsuarioId(usuarioId);
+
+        return entities.stream()
+                .map(TransacaoMapper::toDomain)
+                .toList();
+    }
+
+    @Override
+    public void excluirPorId(Long id) {
+        repository.deleteById(id);
+    }
 }

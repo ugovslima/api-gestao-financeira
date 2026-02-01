@@ -20,5 +20,7 @@ public interface TransacaoRepository extends JpaRepository<TransacaoEntity, Long
             LocalDate fim,
             FormaPagamento formaPagamento
     );
+
+    List<TransacaoEntity> findByUsuarioId(Long usuarioId);
 }
 

@@ -1,10 +1,7 @@
 package com.api_gestao_financeira.transaction_api.infra.controller;
 
 import com.api_gestao_financeira.transaction_api.application.auth.UsuarioAutenticado;
-import com.api_gestao_financeira.transaction_api.application.usecase.BuscarTransacaoPorIdUseCase;
-import com.api_gestao_financeira.transaction_api.application.usecase.CriarRegistroUseCase;
-import com.api_gestao_financeira.transaction_api.application.usecase.CriarTransacaoUseCase;
-import com.api_gestao_financeira.transaction_api.application.usecase.GerarRelatorioDespesasUseCase;
+import com.api_gestao_financeira.transaction_api.application.usecase.*;
 import com.api_gestao_financeira.transaction_api.core.domain.Transacao;
 import com.api_gestao_financeira.transaction_api.infra.dto.CriarRegistroRequest;
 import com.api_gestao_financeira.transaction_api.infra.dto.CriarTransacaoRequest;
@@ -21,6 +18,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @Tag(name = "Transações", description = "Operações de criação, registro e consulta de transações financeiras")
 @SecurityRequirement(name = "bearer-key")
 @RestController
@@ -30,12 +29,16 @@ public class TransacaoController {
     private final CriarTransacaoUseCase criarTransacaoUseCase;
     private final BuscarTransacaoPorIdUseCase buscarTransacaoPorIdUseCase;
     private final CriarRegistroUseCase criarRegistroUseCase;
+    private final BuscarTransacoesPorUsuarioIdUseCase buscarTransacoesPorUsuarioIdUseCase;
+    private final ExcluirTransacaoUseCase excluirTransacaoUseCase;
 
     public TransacaoController(CriarTransacaoUseCase criarTransacaoUseCase,
-                               BuscarTransacaoPorIdUseCase buscarTransacaoPorIdUseCase, CriarRegistroUseCase criarRegistroUseCase, GerarRelatorioDespesasUseCase gerarRelatorioDespesasUseCase) {
+                               BuscarTransacaoPorIdUseCase buscarTransacaoPorIdUseCase, CriarRegistroUseCase criarRegistroUseCase, GerarRelatorioDespesasUseCase gerarRelatorioDespesasUseCase, BuscarTransacoesPorUsuarioIdUseCase buscarTransacoesPorUsuarioIdUseCase, ExcluirTransacaoUseCase excluirTransacaoUseCase) {
         this.criarTransacaoUseCase = criarTransacaoUseCase;
         this.buscarTransacaoPorIdUseCase = buscarTransacaoPorIdUseCase;
         this.criarRegistroUseCase = criarRegistroUseCase;
+        this.buscarTransacoesPorUsuarioIdUseCase = buscarTransacoesPorUsuarioIdUseCase;
+        this.excluirTransacaoUseCase = excluirTransacaoUseCase;
     }
 
     @Operation(
@@ -109,6 +112,50 @@ public class TransacaoController {
         }
 
         return ResponseEntity.ok(TransacaoMapper.toProcessadaResponse(transacao));
+    }
+
+    @Operation(
+            summary = "Buscar todas as transações do usuário",
+            description = "Retorna todas as transações pertencentes ao usuário autenticado"
+    )
+    @ApiResponse(responseCode = "200", description = "Lista de transações retornada com sucesso")
+    @GetMapping
+    public ResponseEntity<List<TransacaoProcessadaResponse>> buscarTodas(
+            @AuthenticationPrincipal UsuarioAutenticado usuarioAutenticado) {
+
+        Long usuarioId = usuarioAutenticado.getId();
+
+        List<TransacaoProcessadaResponse> response = buscarTransacoesPorUsuarioIdUseCase.executar(usuarioId)
+                .stream()
+                .map(TransacaoMapper::toProcessadaResponse)
+                .toList();
+
+        return ResponseEntity.ok(response);
+    }
+
+    @Operation(
+            summary = "Excluir transação",
+            description = "Exclui uma transação do usuário autenticado"
+    )
+    @ApiResponse(responseCode = "204", description = "Transação excluída com sucesso")
+    @ApiResponse(responseCode = "403", description = "Usuário não autorizado")
+    @ApiResponse(responseCode = "404", description = "Transação não encontrada")
+    @DeleteMapping("/{transacaoId}")
+    public ResponseEntity<Void> excluir(
+            @AuthenticationPrincipal UsuarioAutenticado usuarioAutenticado,
+            @PathVariable Long transacaoId) {
+
+        Long usuarioId = usuarioAutenticado.getId();
+
+        Transacao transacao = buscarTransacaoPorIdUseCase.executar(transacaoId);
+
+        if (!transacao.getUsuarioId().equals(usuarioId)) {
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
+        }
+
+        excluirTransacaoUseCase.executar(transacaoId);
+
+        return ResponseEntity.noContent().build();
     }
 
 }

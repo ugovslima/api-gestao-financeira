@@ -17,4 +17,7 @@ public interface TransacaoGateway {
             LocalDate fim,
             FormaPagamento formaPagamento
     );
+    List<Transacao> buscarTransacoesPorUsuarioId(Long usuarioId);
+    void excluirPorId(Long id);
+
 }

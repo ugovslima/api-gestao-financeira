@@ -49,21 +49,6 @@ public class CriarTransacaoUseCase {
 
         Transacao transacao;
 
-        if (formaPagamento == FormaPagamento.DINHEIRO) {
-            transacao = Transacao.registrar(
-                    usuarioId,
-                    formaPagamento,
-                    valorEmReais,
-                    dataTransacao,
-                    descricao,
-                    Parcelas.criar(formaPagamento, parcelas),
-                    null,
-                    cambio
-            );
-
-            return transacaoGateway.salvar(transacao);
-        }
-
         transacao = Transacao.criarPendente(
                 usuarioId,
                 formaPagamento,
