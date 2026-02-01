@@ -23,7 +23,7 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
-class CriarTransacaoUseCaseTest {
+class CriarTransacaoTeste {
 
     @Mock
     private TransacaoGateway transacaoGateway;
